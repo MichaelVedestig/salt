@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style> 
+	.mainResult{
+		font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+		font-size: 80px;
+	}
+	.negativeResult{
+		background-color: red;
+		color: white;
+	}
+	.positiveResult{
+		background-color: green;
+		color: white;
+	}
+	</style>
+</head>
+
+<body>
+	<main>
+		<h1 class="mainResult">1000</h1>
+		<h1 class="mainResult">-1000</h1>
+		<h1 class="mainResult">A name, not a number</h1>
+		
+	</main>
+	<script>
+	function readNumber(){
+		console.log("function started");
+		const number = document.querySelectorAll('.mainResult');
+		for (let i = 0; i < number.length; i++)
+		{
+			console.log("for loop running...");			
+			if (Number(number[i].textContent) < 0){
+				number[i].classList.add("negativeResult");
+			}
+			else if (Number(number[i].textContent) >= 0 ){
+				number[i].classList.add("positiveResult");
+			}
+
+		}
+	}
+	readNumber();
+</script>
+</body>
+</html>

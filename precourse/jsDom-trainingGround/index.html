@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<div name="arne"> Arne</div>
+	<title>Javascript training</title>
+<script src="functions.js"></script>
+<script>
+	function addListInMain(numberOfListItems) {
+  		const ulElement = document.createElement('ul');
+
+ 		 for (let i = 0; i < numberOfListItems; i++) {
+   			 const liItem = document.createElement('li');
+   			 liItem.textContent = `Item #${i+1}`
+   			 ulElement.appendChild(liItem);
+ 		 }
+		 const main = document.querySelector('main');
+ 		 main.appendChild(ulElement);
+}
+
+
+	console.log("salt>  In the head");
+
+
+	function removeDivById(id) {
+ 		 const divToRemove = document.querySelector('div#'+id);
+  		if(divToRemove != undefined) {
+   			 divToRemove.remove();
+		}
+	}
+	</script>
+
+</head>
+<body>
+	<body>
+		<script>
+		console.log("salt> Start of body");
+		</script>
+	<main class="main">
+		<div  name="content" class="big bold bright">Content 1</div>
+  <div class="big bold" id="companyName">Content 2</div>
+  <div name="content" class="big">Content 3</div>
+		<!-- <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias, delectus?</div>
+		<div id="companyName"> Arne Bjarne Lennart</div>
+		<div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque veritatis, voluptatibus voluptas explicabo unde dolores! Commodi, quo. Libero, repellendus! Molestias est ab quaerat maxime possimus nobis cum quam mollitia accusantium laborum vero vitae ex earum impedit debitis veniam officia, sequi tenetur soluta incidunt aspernatur. Est, rerum consectetur. Facilis, quos dolorum.</div> -->
+		<ul id="ulist">
+			<li id="entry"> entry #1</li>
+		</ul>
+	</main>
+	<script>
+		const companyName = myFunctions.getCompanyName();
+	document.getElementsByTagName("div")[1].innerHTML = companyName;
+	document.getElementById('companyName').innerHTML = companyName;
+	console.log("salt> End of body");
+	const boldNodes = document.getElementsByClassName("bold");
+
+	for (let i = 0; i < boldNodes.length; i++) {
+  	boldNodes[i].innerHTML += " ... and bold";
+	} 
+	const companyNameElement = document.querySelector('#companyName');
+	companyNameElement.innerHTML = companyName + ' set using a query selector by id';
+	const boldNodesQuerySelected = document.querySelectorAll('.bold');
+	for (let i = 0; i < boldNodes.length; i++){
+		boldNodes[i].innerHTML += ' ... and bold selected with query';
+	}
+	console.log(`salt> In the body. Company name is ${companyName}`);
+	addListInMain(4);
+		
+	const arne = document.getElementsByName('arne').innerHTML = 'arne';
+	removeDivById('entry');
+	console.log(`Her finns det ikkje lenger nokka ${arne}`);
+
+	function writeListToConsol(){
+
+		for (let i = 0; i < 4; i++){
+			console.log(document.getElementsByTagName("li")[i].textContent);
+			
+		}
+	}
+	writeListToConsol();
+</script>
+	
+	<div id="list"> Bjarne</div>
+</body>
+</html>

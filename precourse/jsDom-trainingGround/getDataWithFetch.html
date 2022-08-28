@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+			main{
+			border: 1px solid black;
+			height: 8000px;
+			position: relative;
+			top: 0px;
+			left: 0px;
+			}
+			.firstName{
+				background-color: rgb(132, 63, 161);
+				position: relative;
+				width: 160px;
+				height: 40px;
+				margin: 2px;
+				padding: 6px;
+				border: 3px solid black;
+			}
+			.lastName{
+				background-color: rgb(132, 63, 161);
+				position: relative;
+				bottom: 60px;
+				left: 180px;
+				width: 160px;
+				height: 40px;
+				margin: 2px;
+				padding: 6px;
+				border: 3px solid black;
+			}
+			.address{
+				background-color: crimson;
+				position: relative;
+				bottom: 40px;
+				width: 400px;
+				height: 40px;
+				margin: 2px;
+				padding: 6px;
+				border: 8px transparent orangered;
+			}
+			.phoneNumber{
+				background-color: rgb(75, 236, 57);
+				position: relative;
+				bottom: 40px;
+				width: 225px;
+				height: 40px;
+				margin: 2px;
+				padding: 6px;
+				border: 8px transparent rgb(27, 145, 208);
+			}
+			.id{color: white}
+			p{
+				border:rgb(27, 145, 208);
+			}
+			.hide{
+				display: none;
+			}
+	</style>
+	<script>
+		function getRandomUsers(element) {
+
+			fetch('https://randomuser.me/api/?gender=female&results=1')
+			.then(response => response.json())
+			.then(data => {
+			postUsersToApi(data.results)
+			});
+		}
+		function getApiUsers(element) {
+
+			fetch('http://localhost:8080/contacts')
+			.then(response => response.json())
+			.then(data => {
+			element.appendChild(createContactList(data));
+			}
+		)
+		}
+
+		function createContactList(contacts) {
+
+			const addressBook = document.createElement('div');
+			addressBook.classList.add("addressBook");
+			for (let i = 0; i < contacts.length; i++){
+				const contact = document.createElement('p');
+				
+				contact.appendChild(createUserUUIDApi(contacts[i]));
+				contact.appendChild(createUserFirstNameApi(contacts[i]));
+				contact.appendChild(createUserLastNameApi(contacts[i]));
+				contact.appendChild(createUserAddressApi(contacts[i]));
+				contact.appendChild(createPhoneNumberApi(contacts[i]));
+				contact.appendChild(createDeleteButton(contacts[i]));
+				contact.appendChild(createUpdateButton(contacts[i]));
+				addressBook.appendChild(contact);
+			}
+			return addressBook;
+		}
+		function createDeleteButton(contact) {
+				const deleteButton = document.createElement("button");
+				deleteButton.innerHTML = "Delete";
+				deleteButton.onclick = function () {deleteContact(contact)};
+				return deleteButton;
+		}
+		function createUpdateButton(contact) {
+				const deleteButton = document.createElement("button");
+				deleteButton.innerHTML = "Update";
+				deleteButton.onclick = function () {updateContact(contact)};
+				return deleteButton;
+		}
+		function updateContact(contact){
+			contact.firstName = prompt("Please enter new first name:", contact.firstName);
+			contact.lastName = prompt("Please enter new last name:", contact.lastName);
+			contact.address = prompt("Please enter new address", contact.address);
+			contact.phoneNumber = prompt("Please enter new phone number:", contact.phoneNumber);
+			console.log(contact);
+			fetch("http://localhost:8080/contacts/".concat(contact.id), {
+				method: "PUT",
+				headers: {'Content-Type': 'application/json',
+						 'Accept': 'application/json'},
+				body: JSON.stringify(contact)
+			});
+		async function deleteContact(contact){
+			fetch("http://localhost:8080/contacts/".concat(contact.id), {
+				method: "DELETE"
+			})
+		}
+	}
+		function postUsersToApi(results) {
+			for (let i = 0; i < results.length; i++){
+				const contact = document.createElement('p');
+				contact.classList.add("contact");
+				contact.appendChild(createUserUUID(results[i]));
+				contact.appendChild(createUserFirstName(results[i]));
+				contact.appendChild(createUserLastName(results[i]));
+		//		contact.appendChild(createUserImage(results[i]));
+				contact.appendChild(createUserAddress(results[i]));
+				contact.appendChild(createPhoneNumber(results[i]));
+				console.log(contact);
+				postToServer(contact);	
+			}
+		}
+		
+		async function postToServer(user){
+			var contact = {
+				"id": user.children[0].textContent,
+				"firstName": user.children[1].textContent,
+				"lastName": user.children[2].textContent,
+				"address": user.children[3].textContent,
+				"phoneNumber": user.children[4].textContent
+			,
+			toJSON: function () {
+				return {
+					id: this.id,
+					firstName: this.firstName,
+					lastName: this.lastName,
+					address: this.address,
+					phoneNumber: this.phoneNumber
+				}
+			}
+			}
+			await fetch("http://localhost:8080/contacts", {
+				method: "POST",
+				headers: {'Content-Type': 'application/json',
+						 'Accept': 'application/json'},
+				body: JSON.stringify(contact)
+			}).then(async rawResponse => {
+				var content = await rawResponse.json()
+				console.log("POST request complete! object posted:", rawResponse);
+				console.log(contact);
+			});
+			
+		}
+		function createUserUUID(user){
+			const id = document.createElement('h2');
+			id.classList.add("id");
+			id.textContent = `${user.login.uuid}`;
+			return id;
+		}
+		function createPhoneNumber(user){
+			const phoneNumber = document.createElement('h2');
+			phoneNumber.classList.add("phoneNumber");
+			phoneNumber.textContent = `${user.phone}`;
+			return phoneNumber;
+		}
+		function createUserAddress(user) {
+
+			const address = document.createElement('h2');
+			address.classList.add("address");
+			address.textContent = `${user.location.street.name} ${user.location.street.number}`;
+			return address;
+		}
+		function createUserImage(user) {
+
+			const img = document.createElement('img');
+			img.src = `${user.picture.thumbnail}`;
+			return img;
+		}
+		function createUserFirstName(user) {
+
+			const firstName = document.createElement('h2');
+			firstName.classList.add("firstName");
+			firstName.textContent = `${user.name.first}`;
+			return firstName;
+		}
+
+		function createUserLastName(user) {
+
+		const lastName = document.createElement('h2');
+		lastName.classList.add("lastName");
+		lastName.textContent = `${user.name.last}`;
+		return lastName;
+		}
+		
+		function createUserUUIDApi(user){
+			const id = document.createElement('h2');
+			id.classList.add("id");
+			id.textContent = `${user.id}`;
+			return id;
+		}
+		function createPhoneNumberApi(user){
+			const phoneNumber = document.createElement('h2');
+			phoneNumber.classList.add("phoneNumber");
+			phoneNumber.textContent = `${user.phoneNumber}`;
+			return phoneNumber;
+		}
+		function createUserAddressApi(user) {
+
+			const address = document.createElement('h2');
+			address.classList.add("address");
+			address.textContent = `${user.address}`;
+			return address;
+		}
+		function createUserImageApi(user) {
+
+			const img = document.createElement('img');
+			img.src = `${user.picture.thumbnail}`;
+			return img;
+		}
+		function createUserFirstNameApi(user) {
+
+			const firstName = document.createElement('h2');
+			firstName.classList.add("firstName");
+			firstName.textContent = `${user.firstName}`;
+			return firstName;
+		}
+
+		function createUserLastNameApi(user) {
+
+		const lastName = document.createElement('h2');
+		lastName.classList.add("lastName");
+		lastName.textContent = `${user.lastName}`;
+		return lastName;
+		}
+
+		
+		document.addEventListener('DOMContentLoaded', () => {
+			console.log("Document is loaded");
+			const mainElement = document.querySelector("main");
+			getApiUsers(mainElement);
+		});
+		const registerNewContact = () => {
+			event.preventDefault();
+			console.log(event.target);
+			const contact = document.createElement('p');
+			const id = document.createElement('h2');
+			id.textContent = crypto.randomUUID();
+			contact.appendChild(id);
+			for (let i = 0; i < event.target.length; i++){
+				const attribute = document.createElement('h2');
+				attribute.textContent = event.target[i].value;
+				contact.appendChild(attribute);
+			}
+			postToServer(contact);
+		}
+
+	</script>
+</head>
+<body>
+	<main>
+		<div class="searchBar">
+			<input placeholder="Search" type="search" id="search" main-search>
+		</div>
+		<form onsubmit="return registerNewContact()">
+			First name:<br>
+			<input type="text" name="first">
+			<br>
+			Last name:<br>
+			<input type="text" name="last">
+			<br>
+			Address:<br>
+			<input type="text" name="address">
+			<br>
+			Phone number:<br>
+			<input type="text" name="phoneNumber">
+			<br>
+			<input type="submit" value="Add new contact">
+		 </form>
+		<button onclick="getRandomUsers();">Generate random contact</button>
+
+
+		</form>
+	</main>
+</body>
+<script defer>
+
+const searchInput = document.querySelector("div.searchBar");
+	let map = [];
+searchInput.addEventListener('input', (e) => {
+	const value = e.target.value.toLowerCase();
+	console.log(value);
+	const contacts = document.querySelector("div.addressBook").children;
+	map = Array.from(contacts);
+	map.forEach(contact => {
+		const searchMatch = contact.innerHTML.toLocaleLowerCase().includes(value);
+		contact.classList.toggle("hide", !searchMatch);
+		});
+	});
+
+
+</script>
+</html>

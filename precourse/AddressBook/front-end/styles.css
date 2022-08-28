@@ -1,0 +1,33 @@
+.search-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: .25rem;
+}
+
+input {
+	font-size: 1rem;
+}
+
+.addressBook {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: .50rem;
+	margin-top: 2rem;
+}
+
+.contact {
+	border: 2px solid black;
+	background-color: aquamarine;
+	padding: 1rem;
+}
+
+.contact > .id {
+	font-size: 0.5rem;
+	color: #600;
+}
+.contact > .Name {
+	font-size: 2rem;
+}
+.hide {
+	display: none;
+}

@@ -1,0 +1,14 @@
+div.gruppe1{
+	background-color: black; color: whitesmoke 
+	}
+	div.gruppe2{
+		background-color: green; color: blue;
+	}
+	.huge{
+		font-size: xx-large;
+	}
+	#firstName{
+		color: orange;
+		font-weight:bold;
+		font-size: xx-large;
+	}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style> 
+	.mainResult{
+		font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+		font-size: 80px;
+	}
+	.negativeResult{
+		background-color: red;
+		color: white;
+	}
+	.positiveResult{
+		background-color: green;
+		color: white;
+	}
+	</style>
+	<script>
+		function readNumber(){
+		console.log("function started");
+		const number = document.querySelectorAll('.mainResult');
+		for (let i = 0; i < number.length; i++)
+		{
+			console.log("for loop running...");			
+			if (Number(number[i].textContent) < 0){
+				number[i].classList.add("negativeResult");
+			}
+			else if (Number(number[i].textContent) >= 0 ){
+				number[i].classList.add("positiveResult");
+			}
+
+		}
+	}
+	function invertColorsOfResults() {
+ 	 const mainResultElements = document.querySelectorAll('.mainResult');
+
+ 	 for (let i = 0; i < mainResultElements.length; i++) {
+    	const element = mainResultElements[i];
+    	console.log(element.textContent);
+
+    if(element.classList.contains('positiveResult')){
+      element.classList.remove('positiveResult');
+      element.classList.add('negativeResult');
+      continue;
+    }
+
+    if(element.classList.contains('negativeResult')){
+      element.classList.remove('negativeResult');
+      element.classList.add('positiveResult');
+      continue;
+    }
+  }
+}
+	document.addEventListener('DOMContentLoaded', () => {
+		console.log("Document is loaded");
+		readNumber();
+	});
+	</script>
+</head>
+
+<body>
+	<main>
+		<h1 class="mainResult">1000</h1>
+		<h1 class="mainResult">-1000</h1>
+		<h1 class="mainResult">A name, not a number</h1>
+		<button onclick="invertColorsOfResults();">Invert colors</button>
+		<button id="btn">second button</button>
+	</main>
+	<script>
+	const btn = document.getElementById("btn");
+	btn.addEventListener('click', () => {
+ 	 invertColorsOfResults();
+	// alternativt: btn.onclic = inverColorsOfResults;
+});
+	//readNumber();
+</script>
+</body>
+</html>
